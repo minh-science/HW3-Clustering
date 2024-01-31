@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.spatial.distance import cdist
 
+import random as rd
 
 class KMeans:
     def __init__(self, k: int, tol: float = 1e-6, max_iter: int = 100):
@@ -20,6 +21,9 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        self.k_clusters = k
+        self.tolerance = tol
+        self.maximum_iterations = max_iter
 
     def fit(self, mat: np.ndarray):
         """
@@ -36,6 +40,30 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        print(mat.size)
+        print(self.tolerance)
+        print(mat.ndim)
+        for i in range(0,mat.ndim):
+            print("ndim",i)
+        print( max(mat[:,0]), min(mat[:,0]))
+        d1 = max(mat[:,0]) - min(mat[:,0])
+        d2 = max(mat[:,1]) - min(mat[:,1])
+        print(d1)
+        print(d2)
+            
+
+        # print(self.maximum_iterations)
+        # c1 = np.random()
+        # print(c1)
+        count = int( 0 )
+        for i in mat:
+            for j in mat:
+                # cdist(i,j)
+                count += 1
+        # print( count )
+
+
+
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
