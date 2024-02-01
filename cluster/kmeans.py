@@ -24,6 +24,12 @@ class KMeans:
         self.k_clusters = k
         self.tolerance = tol
         self.maximum_iterations = max_iter
+        self.centroids = None
+        self.error = None
+
+        if k < 1:
+            raise ValueError("Invalid K value")
+        
 
     def fit(self, mat: np.ndarray):
         """
@@ -40,27 +46,30 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
-        print(mat.size)
-        print(self.tolerance)
-        print(mat.ndim)
-        for i in range(0,mat.ndim):
-            print("ndim",i)
-        print( max(mat[:,0]), min(mat[:,0]))
-        d1 = max(mat[:,0]) - min(mat[:,0])
-        d2 = max(mat[:,1]) - min(mat[:,1])
-        print(d1)
-        print(d2)
+        n, m = mat.shape
+        if n < self.k_clusters:
+            raise ValueError("Invalid k value, k should be less than number of observations")
+        # print("n", n)
+
+        self.centroids = mat[np.random.choice(n, self.k_clusters, replace=False)]
             
 
-        # print(self.maximum_iterations)
-        # c1 = np.random()
-        # print(c1)
-        count = int( 0 )
-        for i in mat:
-            for j in mat:
-                # cdist(i,j)
-                count += 1
-        # print( count )
+        for _ in range(self.maximum_iterations):
+            # Assign each observation to the nearest centroid
+            labels = np.argmin(cdist(mat, self.centroids), axis=1)
+
+            # Update centroids
+            new_centroids = np.array([mat[labels == i].mean(axis=0) for i in range(self.k_clusters)])
+
+            # Check for convergence
+            if np.linalg.norm(new_centroids - self.centroids) < self.tolerance:
+                # print("loooooop")
+                return
+        
+            self.centroids = new_centroids
+
+        # Error calculation, sum of squares 
+        self.error = np.sum(np.min(cdist(mat, self.centroids), axis=1)**2)
 
 
 
@@ -81,6 +90,12 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        if mat.shape[1] != self.centroids.shape[1]:
+            raise ValueError("Input matrix has different number of features than the fitted data.")
+        
+        predicted_labels = np.argmin(cdist(mat, self.centroids), axis=1)
+
+        return predicted_labels
 
     def get_error(self) -> float:
         """
@@ -91,6 +106,7 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        return self.error
 
     def get_centroids(self) -> np.ndarray:
         """
@@ -100,3 +116,4 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        return self.centroids
