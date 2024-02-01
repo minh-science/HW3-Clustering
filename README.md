@@ -1,4 +1,4 @@
-! [BuildStatus] (https://github.com/minh-science/HW3-Clustering/workflows/HW2-BFS/badge.svg?event=push)
+! [BuildStatus] (https://github.com/minh-science/HW3-Clustering/actions/workflows/test.yml/badge.svg?event=push)
 # Assignment 3
 Implementation of KMeans and Silhouette Scoring
 
