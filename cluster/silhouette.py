@@ -28,15 +28,16 @@ class Silhouette:
         silhouette_scores = np.zeros(n)
 
         for i in range(n):
-            # Calculate the average distance of the ith point to all other points in the same cluster
+            # Calculate the average distance of the ith observation to all other observations in the same cluster
             intra_cluster_distances = cdist(X[i:i+1, :], X[y == y[i]])
             a_i = np.mean(intra_cluster_distances)
 
-            # Calculate the average distance of the ith point to all points in the nearest other cluster
+            # Calculate the average distance of the ith observation to all observations in the nearest other cluster
             other_cluster_distances = cdist(X[i:i+1, :], X[y != y[i]])
+            # print(other_cluster_distances)
             b_i = np.min(other_cluster_distances)
 
             # Calculate the silhouette score for the ith observation
-            silhouette_scores[i] = (b_i - a_i) / max(a_i, b_i)
+            silhouette_scores[i] = (b_i - a_i) / max(b_i, a_i)
 
         return silhouette_scores

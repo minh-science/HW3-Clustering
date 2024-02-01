@@ -9,15 +9,11 @@ def test_kmeans():
 
     # initialize sklearn kmeans
     sk_out = sk_kmeans(n_clusters= 3).fit(x_clusters)
-    # print( sk_out.labels_ ) 
-    # print(sk_out.cluster_centers_)
 
     # initialize my kmeans 
     ml_out = ml_kmeans(k=3)
     ml_out.fit(x_clusters)
     ml_predict = ml_out.predict(x_clusters)
-    # print(ml_predict)
-    # print( ml_out.centroids )
 
     # assert centroids are equivalent
     centroid_diff = sk_out.cluster_centers_ - ml_out.centroids 
